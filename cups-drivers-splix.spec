@@ -15,6 +15,7 @@ BuildRequires:	ghostscript
 Conflicts:	cups-drivers = 2007
 Conflicts:	printer-utils = 2007
 Conflicts:	printer-filters = 2007
+BuildRoot:	%{_tmppath}/%{name}-%{version}-root
 
 %description
 SpliX is a set of CUPS printer drivers for SPL (Samsung Printer Language)
