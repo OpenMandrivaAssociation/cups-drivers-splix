@@ -3,11 +3,12 @@
 Summary:	CUPS printer drivers for SPL (Samsung Printer Language) printers
 Name:		cups-drivers-%{rname}
 Version:	1.0.1
-Release:	%mkrel 5
+Release:	%mkrel 6
 License:	GPL
 Group:		System/Printing
 URL:		http://splix.ap2c.org/
 Source0:	http://downloads.sourceforge.net/splix/%{rname}-%{version}.tar.bz2
+Patch0:		splix-1.0.1-LDFLAGS.diff
 Requires:	cups
 BuildRequires:	cupsddk
 BuildRequires:	cups-devel
@@ -15,7 +16,7 @@ BuildRequires:	ghostscript
 Conflicts:	cups-drivers = 2007
 Conflicts:	printer-utils = 2007
 Conflicts:	printer-filters = 2007
-BuildRoot:	%{_tmppath}/%{name}-%{version}-root
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 SpliX is a set of CUPS printer drivers for SPL (Samsung Printer Language)
@@ -43,12 +44,17 @@ This package contains CUPS drivers (PPD) for the following printers:
 %prep
 
 %setup -q -n %{rname}-%{version}
+%patch0 -p1
 
 %build
+pushd src
+    make clean
+    %make CXXFLAGS="-I../include %{optflags}" LDFLAGS="%{ldflags}" LIBS="-lcups -lcupsimage" all pbmtospl2
+popd
 
-%make
-%make -C src pbmtospl2
-%make -C tools
+%make CXXFLAGS="%{optflags}" LDFLAGS="%{ldflags}" -C tools
+
+make -C ppd
 
 %install
 rm -rf %{buildroot}
