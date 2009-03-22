@@ -2,16 +2,18 @@
 
 Summary:	CUPS printer drivers for SPL (Samsung Printer Language) printers
 Name:		cups-drivers-%{rname}
-Version:	1.0.1
-Release:	%mkrel 6
+Version:	2.0.0
+Release:	%mkrel 1
 License:	GPL
 Group:		System/Printing
 URL:		http://splix.ap2c.org/
 Source0:	http://downloads.sourceforge.net/splix/%{rname}-%{version}.tar.bz2
-Patch0:		splix-1.0.1-LDFLAGS.diff
+Patch0:		splix-2.0.0-ldflags.patch
+Patch1:		splix-2.0.0-tools-nojbig.patch
 Requires:	cups
 BuildRequires:	cupsddk
 BuildRequires:	cups-devel
+BuildRequires:	libqt4-devel
 BuildRequires:	ghostscript
 Conflicts:	cups-drivers = 2007
 Conflicts:	printer-utils = 2007
@@ -23,51 +25,25 @@ SpliX is a set of CUPS printer drivers for SPL (Samsung Printer Language)
 printers. If you have a such printer, you need to download and use SpliX.
 Moreover you will find documentation about this proprietary language.
 
-This package contains CUPS drivers (PPD) for the following printers:
-
- o Samsung CLP-300
- o Samsung CLP-500
- o Samsung CLP-510
- o Samsung CLP-600
- o Samsung ML-1510
- o Samsung ML-1520
- o Samsung ML-1610
- o Samsung ML-1710
- o Samsung ML-1740
- o Samsung ML-1750
- o Samsung ML-2010
- o Samsung ML-2150
- o Samsung ML-2250
- o Samsung ML-2550
- o Xerox Phaser 6100
+This package contains CUPS drivers (PPD) for Dell, Samsung and Xerox
+printers.
 
 %prep
-
 %setup -q -n %{rname}-%{version}
-%patch0 -p1
+%patch0 -p1 -b .ldflags
+%patch1 -p1 -b .tools-nojbig
 
 %build
-pushd src
-    make clean
-    %make CXXFLAGS="-I../include %{optflags}" LDFLAGS="%{ldflags}" LIBS="-lcups -lcupsimage" all pbmtospl2
-popd
-
-%make CXXFLAGS="%{optflags}" LDFLAGS="%{ldflags}" -C tools
-
-make -C ppd
+# note: build using DISABLE_JBIG=1 because of possible patent issue
+%make V=1 OPTIM_CXXFLAGS="%{optflags}" LDFLAGS="%{ldflags}" DISABLE_JBIG=1
+%make CXXFLAGS="%{optflags} `pkg-config QtCore --cflags`" \
+      LIBS="`pkg-config QtCore --libs` %{ldflags}" -C tools
 
 %install
 rm -rf %{buildroot}
-
-install -d %{buildroot}%{_bindir}
-install -d %{buildroot}%{_sysconfdir}/cups
-install -d %{buildroot}%{_prefix}/lib/cups/filter
-install -d %{buildroot}%{_datadir}/cups/model/%{name}
-
-install -m0755 src/pbmtospl2 %{buildroot}%{_bindir}/%{name}-pbmtospl2
+%makeinstall_std
+mkdir -p %{buildroot}%{_bindir}
 install -m0755 tools/decompress %{buildroot}%{_bindir}/%{name}-decompress
-install -m0755 src/rastertospl2 %{buildroot}%{_prefix}/lib/cups/filter/rastertospl2
-install -m0644 ppd/*.ppd* %{buildroot}%{_datadir}/cups/model/%{name}/
 
 %clean
 rm -rf %{buildroot}
@@ -75,8 +51,10 @@ rm -rf %{buildroot}
 %files
 %defattr(0644,root,root,0755)
 %doc AUTHORS COPYING ChangeLog README THANKS TODO
-%attr(0755,root,root) %{_bindir}/%{name}-pbmtospl2
-%attr(0755,root,root) %{_bindir}/%{name}-decompress
-%attr(0755,root,root) %{_prefix}/lib/cups/filter/rastertospl2
-%attr(0755,root,root) %dir %{_datadir}/cups/model/%{name}
-%attr(0644,root,root) %{_datadir}/cups/model/%{name}/*.ppd*
+%{_datadir}/cups/model/dell
+%{_datadir}/cups/model/samsung
+%{_datadir}/cups/model/xerox
+%defattr(0755,root,root,0755)
+%{_bindir}/%{name}-decompress
+%{_prefix}/lib/cups/filter/pstoqpdl
+%{_prefix}/lib/cups/filter/rastertoqpdl
