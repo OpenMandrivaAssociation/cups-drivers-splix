@@ -10,6 +10,7 @@ URL:		http://splix.ap2c.org/
 Source0:	http://downloads.sourceforge.net/splix/%{rname}-%{version}.tar.bz2
 Patch0:		splix-2.0.0-ldflags.patch
 Patch1:		splix-2.0.0-tools-nojbig.patch
+Patch2:		splix-2.0.0-gcc44.patch
 Requires:	cups
 BuildRequires:	cupsddk
 BuildRequires:	cups-devel
@@ -32,6 +33,7 @@ printers.
 %setup -q -n %{rname}-%{version}
 %patch0 -p1 -b .ldflags
 %patch1 -p1 -b .tools-nojbig
+%patch2 -p1 -b .gcc44
 
 %build
 # note: build using DISABLE_JBIG=1 because of possible patent issue
