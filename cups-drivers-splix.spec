@@ -12,7 +12,7 @@ Patch0:		splix-2.0.0-ldflags.patch
 Patch1:		splix-2.0.0-tools-nojbig.patch
 Patch2:		splix-2.0.0-gcc44.patch
 Requires:	cups
-BuildRequires:	cupsddk
+BuildRequires:	cups
 BuildRequires:	cups-devel
 BuildRequires:	libqt4-devel
 BuildRequires:	ghostscript
