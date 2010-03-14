@@ -3,7 +3,7 @@
 Summary:	CUPS printer drivers for SPL (Samsung Printer Language) printers
 Name:		cups-drivers-%{rname}
 Version:	2.0.0
-Release:	%mkrel 2
+Release:	%mkrel 3
 License:	GPL
 Group:		System/Printing
 URL:		http://splix.ap2c.org/
