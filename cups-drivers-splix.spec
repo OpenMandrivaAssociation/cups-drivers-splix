@@ -11,6 +11,7 @@ Source0:	http://downloads.sourceforge.net/splix/%{rname}-%{version}.tar.bz2
 Patch0:		splix-2.0.0-ldflags.patch
 Patch1:		splix-2.0.0-tools-nojbig.patch
 Patch2:		splix-2.0.0-gcc44.patch
+Patch3:		splix-2.0.0-gcc45.diff
 Requires:	cups
 BuildRequires:	cups
 BuildRequires:	cups-devel
@@ -34,6 +35,7 @@ printers.
 %patch0 -p1 -b .ldflags
 %patch1 -p1 -b .tools-nojbig
 %patch2 -p1 -b .gcc44
+%patch3 -p0 -b .gcc45
 
 %build
 # note: build using DISABLE_JBIG=1 because of possible patent issue
