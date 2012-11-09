@@ -1,0 +1,12 @@
+Index: splix-2.0.0/tools/algo0x11.cpp
+===================================================================
+--- splix-2.0.0/tools/algo0x11.cpp
++++ splix-2.0.0/tools/algo0x11.cpp	2009-05-26 12:56:54.000000000 -0400
+@@ -22,6 +22,7 @@
+ #include <QtCore/QTextStream>
+ #include "page.h"
+ #include "i18n.h"
++#include <stdint.h>
+ 
+ 
+ bool decompress0x11(const QByteArray& input, QByteArray& output, 

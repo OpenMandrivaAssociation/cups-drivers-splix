@@ -1,0 +1,18 @@
+diff -p -up splix-2.0.0/rules.mk.orig splix-2.0.0/rules.mk
+--- splix-2.0.0/rules.mk.orig	2009-03-22 04:40:49.000000000 -0300
++++ splix-2.0.0/rules.mk	2009-03-22 04:41:24.000000000 -0300
+@@ -6,12 +6,12 @@
+ 
+ $(rastertoqpdl_TARGET): $(rastertoqpdl_OBJ)
+ 	$(call printCmd, $(cmd_link))
+-	$(Q)g++ -o $@ $^ $(rastertoqpdl_CXXFLAGS) $(rastertoqpdl_LDFLAGS) \
++	$(Q)g++ $(LDFLAGS) -o $@ $^ $(rastertoqpdl_CXXFLAGS) $(rastertoqpdl_LDFLAGS) \
+ 		$(rastertoqpdl_LIBS)
+ 
+ $(pstoqpdl_TARGET): $(pstoqpdl_OBJ)
+ 	$(call printCmd, $(cmd_link))
+-	$(Q)g++ -o $@ $^ $(pstoqpdl_CXXFLAGS) $(pstoqpdl_LDFLAGS) \
++	$(Q)g++ $(LDFLAGS) -o $@ $^ $(pstoqpdl_CXXFLAGS) $(pstoqpdl_LDFLAGS) \
+ 		$(pstoqpdl_LIBS)
+ 
+ .PHONY: install installcms

@@ -1,0 +1,43 @@
+diff -p -up splix-2.0.0/tools/Makefile.orig splix-2.0.0/tools/Makefile
+--- splix-2.0.0/tools/Makefile.orig	2009-03-22 04:31:38.000000000 -0300
++++ splix-2.0.0/tools/Makefile	2009-03-22 04:32:25.000000000 -0300
+@@ -6,31 +6,31 @@ SRCS_decompress	:= decompress.cpp applia
+ 		   algo0x11.cpp
+ HEADERS_decompress:= appliargs.h i18n.h pjl.h qpdl.h page.h algo0x11.h
+ 
+-SRCS_jbgtopbm	:= jbgtopbm.cpp appliargs.cpp
+-HEADERS_jbgtopbm:= appliargs.h
++#SRCS_jbgtopbm	:= jbgtopbm.cpp appliargs.cpp
++#HEADERS_jbgtopbm:= appliargs.h
+ 
+-PROJECTS	:= decompress jbgtopbm
++PROJECTS	:= decompress #jbgtopbm
+ 
+ CXXFLAGS  	:= -O0 -g `pkg-config QtCore --cflags`
+ LIBS		:= `pkg-config QtCore --libs`
+ 
+ OBJS_decompress	:= $(SRCS_decompress:.cpp=.o)
+-OBJS_jbgtopbm	:= $(SRCS_jbgtopbm:.cpp=.o)
++#OBJS_jbgtopbm	:= $(SRCS_jbgtopbm:.cpp=.o)
+ 
+ all: $(PROJECTS)
+ 
+ $(OBJS_decompress): $(HEADERS_decompress)
+-$(OBJS_jbgtopbm): $(HEADERS_jbgtopbm)
++#$(OBJS_jbgtopbm): $(HEADERS_jbgtopbm)
+ 
+ decompress: $(OBJS_decompress)
+ 	$(CXX) -o $@ $(LDFLAGS) $^ $(LIBS)
+ 
+-jbgtopbm: $(OBJS_jbgtopbm)
+-	$(CXX) -o $@ $(LDFLAGS) $^ $(LIBS) -ljbig
++#jbgtopbm: $(OBJS_jbgtopbm)
++#	$(CXX) -o $@ $(LDFLAGS) $^ $(LIBS) -ljbig
+ 
+ .PHONY: clean cleanall
+ clean:
+-	$(RM) $(OBJS_decompress) $(OBJS_jbgtopbm)
++	$(RM) $(OBJS_decompress) #$(OBJS_jbgtopbm)
+ 
+ cleanall: clean
+ 	$(RM) $(PROJECTS)
