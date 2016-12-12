@@ -1,0 +1,13 @@
+--- splix-2.0.0/tools/Makefile.orig	2016-12-12 11:43:30.971504420 +0000
++++ splix-2.0.0/tools/Makefile	2016-12-12 11:41:36.187749959 +0000
+@@ -11,8 +11,8 @@
+ 
+ PROJECTS	:= decompress #jbgtopbm
+ 
+-CXXFLAGS  	:= -O0 -g `pkg-config QtCore --cflags`
+-LIBS		:= `pkg-config QtCore --libs`
++CXXFLAGS  	:= -O0 -g `pkg-config Qt5Core --cflags`
++LIBS		:= `pkg-config Qt5Core --libs`
+ 
+ OBJS_decompress	:= $(SRCS_decompress:.cpp=.o)
+ #OBJS_jbgtopbm	:= $(SRCS_jbgtopbm:.cpp=.o)
