@@ -1,5 +1,5 @@
---- src/ppdfile.cpp	2009-02-06 12:49:10.000000000 +0100
-+++ src/ppdfile.cpp.oden	2010-12-01 10:32:53.000000000 +0100
+--- a/src/ppdfile.cpp	2009-02-06 12:49:10.000000000 +0100
++++ b/src/ppdfile.cpp.oden	2010-12-01 10:32:53.000000000 +0100
 @@ -282,7 +282,7 @@ bool PPDFile::Value::operator != (const
   * Opérateur d'assignation
   * Assignment operator

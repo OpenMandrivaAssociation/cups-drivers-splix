@@ -3,7 +3,7 @@
 Summary:	CUPS printer drivers for SPL (Samsung Printer Language) printers
 Name:		cups-drivers-%{rname}
 Version:	2.0.0
-Release:	16
+Release:	17
 License:	GPLv2
 Group:		System/Printing
 URL:		http://splix.ap2c.org/
@@ -12,10 +12,11 @@ Patch0:		splix-2.0.0-ldflags.patch
 Patch1:		splix-2.0.0-tools-nojbig.patch
 Patch2:		splix-2.0.0-gcc44.patch
 Patch3:		splix-2.0.0-gcc45.diff
+Patch4:		splix-2.0.0-qt5.patch
 BuildRequires:	cups
 BuildRequires:	cups-devel
 BuildRequires:	ghostscript
-BuildRequires:	qt4-devel
+BuildRequires:	pkgconfig(Qt5Core)
 Requires:	cups
 
 %description
@@ -28,16 +29,13 @@ printers.
 
 %prep
 %setup -qn %{rname}-%{version}
-%patch0 -p1 -b .ldflags
-%patch1 -p1 -b .tools-nojbig
-%patch2 -p1 -b .gcc44
-%patch3 -p0 -b .gcc45
+%apply_patches
 
 %build
 # note: build using DISABLE_JBIG=1 because of possible patent issue
 %make V=1 OPTIM_CXXFLAGS="%{optflags}" LDFLAGS="%{ldflags}" DISABLE_JBIG=1
-%make CXXFLAGS="%{optflags} `pkg-config QtCore --cflags`" \
-	LIBS="`pkg-config QtCore --libs` %{ldflags}" -C tools
+%make CXXFLAGS="%{optflags} `pkg-config Qt5Core --cflags`" \
+	LIBS="`pkg-config Qt5Core --libs` %{ldflags}" -C tools
 
 %install
 %makeinstall_std
