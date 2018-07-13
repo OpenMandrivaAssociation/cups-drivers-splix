@@ -13,6 +13,16 @@ Patch1:		splix-2.0.0-tools-nojbig.patch
 Patch2:		splix-2.0.0-gcc44.patch
 Patch3:		splix-2.0.0-gcc45.diff
 Patch4:		splix-2.0.0-qt5.patch
+BuildRequires:	pkgconfig(com_err)
+BuildRequires:	pkgconfig(mit-krb5-gssapi)
+BuildRequires:	pkgconfig(mit-krb5)
+BuildRequires:	pkgconfig(krb5-gssapi)
+BuildRequires:	pkgconfig(kdb)
+BuildRequires:	pkgconfig(kadm-server)
+BuildRequires:	pkgconfig(kadm-client)
+BuildRequires:	pkgconfig(gssrpc)
+BuildRequires:	pkgconfig(krb5)
+BuildRequires:	pkgconfig(zlib)
 BuildRequires:	cups
 BuildRequires:	cups-devel
 BuildRequires:	ghostscript
