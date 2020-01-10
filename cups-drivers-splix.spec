@@ -39,7 +39,7 @@ printers.
 
 %prep
 %setup -qn %{rname}-%{version}
-%apply_patches
+%autopatch -p1
 
 %build
 # note: build using DISABLE_JBIG=1 because of possible patent issue
