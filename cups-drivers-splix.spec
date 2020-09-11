@@ -3,7 +3,7 @@
 Summary:	CUPS printer drivers for SPL (Samsung Printer Language) printers
 Name:		cups-drivers-%{rname}
 Version:	2.0.0
-Release:	18
+Release:	19
 License:	GPLv2
 Group:		System/Printing
 URL:		http://splix.ap2c.org/
@@ -13,6 +13,7 @@ Patch1:		splix-2.0.0-tools-nojbig.patch
 Patch2:		splix-2.0.0-gcc44.patch
 Patch3:		splix-2.0.0-gcc45.diff
 Patch4:		splix-2.0.0-qt5.patch
+Patch5:		splix-2.0.0-compile.patch
 BuildRequires:	pkgconfig(com_err)
 BuildRequires:	pkgconfig(mit-krb5-gssapi)
 BuildRequires:	pkgconfig(mit-krb5)
@@ -38,12 +39,10 @@ This package contains CUPS drivers (PPD) for Dell, Samsung and Xerox
 printers.
 
 %prep
-%setup -qn %{rname}-%{version}
-%autopatch -p1
+%autosetup -p1 -n %{rname}-%{version}
 
 %build
-# note: build using DISABLE_JBIG=1 because of possible patent issue
-%make V=1 OPTIM_CXXFLAGS="%{optflags}" LDFLAGS="%{ldflags}" DISABLE_JBIG=1
+%make V=1 OPTIM_CXXFLAGS="%{optflags}" LDFLAGS="%{ldflags}"
 %make CXXFLAGS="%{optflags} `pkg-config Qt5Core --cflags`" \
 	LIBS="`pkg-config Qt5Core --libs` %{ldflags}" -C tools
 
@@ -60,4 +59,3 @@ install -m0755 tools/decompress %{buildroot}%{_bindir}/%{name}-decompress
 %{_bindir}/%{name}-decompress
 %{_prefix}/lib/cups/filter/pstoqpdl
 %{_prefix}/lib/cups/filter/rastertoqpdl
-
