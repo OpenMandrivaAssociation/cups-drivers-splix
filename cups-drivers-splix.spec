@@ -3,7 +3,7 @@
 Summary:	CUPS printer drivers for SPL (Samsung Printer Language) printers
 Name:		cups-drivers-%{rname}
 Version:	2.0.0
-Release:	19
+Release:	20
 License:	GPLv2
 Group:		System/Printing
 URL:		http://splix.ap2c.org/
@@ -24,6 +24,7 @@ BuildRequires:	pkgconfig(kadm-client)
 BuildRequires:	pkgconfig(gssrpc)
 BuildRequires:	pkgconfig(krb5)
 BuildRequires:	pkgconfig(zlib)
+BuildRequires:	jbig-devel
 BuildRequires:	cups
 BuildRequires:	cups-devel
 BuildRequires:	ghostscript
@@ -41,13 +42,15 @@ printers.
 %prep
 %autosetup -p1 -n %{rname}-%{version}
 
+mv -v *.ppd ppd/
+
 %build
-%make V=1 OPTIM_CXXFLAGS="%{optflags}" LDFLAGS="%{ldflags}"
-%make CXXFLAGS="%{optflags} `pkg-config Qt5Core --cflags`" \
-	LIBS="`pkg-config Qt5Core --libs` %{ldflags}" -C tools
+%make_build V=1 OPTIM_CXXFLAGS="%{optflags}" LDFLAGS="%{build_ldflags}"
+%make_build CXXFLAGS="%{optflags} $(pkg-config Qt5Core --cflags)" \
+	LIBS="$(pkg-config Qt5Core --libs) %{ldflags}" -C tools
 
 %install
-%makeinstall_std
+%make_install
 mkdir -p %{buildroot}%{_bindir}
 install -m0755 tools/decompress %{buildroot}%{_bindir}/%{name}-decompress
 
