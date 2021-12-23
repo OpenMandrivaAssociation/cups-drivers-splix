@@ -42,7 +42,6 @@ printers.
 %prep
 %autosetup -p1 -n %{rname}-%{version}
 
-mv -v *.ppd ppd/
 
 %build
 %make_build V=1 OPTIM_CXXFLAGS="%{optflags}" LDFLAGS="%{build_ldflags}"
