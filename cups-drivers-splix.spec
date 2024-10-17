@@ -6,7 +6,7 @@ Version:	2.0.0
 Release:	21
 License:	GPLv2
 Group:		System/Printing
-URL:		http://splix.ap2c.org/
+URL:		https://splix.ap2c.org/
 Source0:	http://downloads.sourceforge.net/splix/%{rname}-%{version}.tar.bz2
 Patch0:		splix-2.0.0-ldflags.patch
 Patch1:		splix-2.0.0-tools-nojbig.patch
