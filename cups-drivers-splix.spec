@@ -3,7 +3,7 @@
 Summary:	CUPS printer drivers for SPL (Samsung Printer Language) printers
 Name:		cups-drivers-%{rname}
 Version:	2.0.0
-Release:	21
+Release:	22
 License:	GPLv2
 Group:		System/Printing
 URL:		https://splix.ap2c.org/
@@ -12,7 +12,7 @@ Patch0:		splix-2.0.0-ldflags.patch
 Patch1:		splix-2.0.0-tools-nojbig.patch
 Patch2:		splix-2.0.0-gcc44.patch
 Patch3:		splix-2.0.0-gcc45.diff
-Patch4:		splix-2.0.0-qt5.patch
+Patch4:		splix-2.0.0-qt6.patch
 Patch5:		splix-2.0.0-compile.patch
 BuildRequires:	pkgconfig(com_err)
 BuildRequires:	pkgconfig(mit-krb5-gssapi)
@@ -28,7 +28,7 @@ BuildRequires:	jbig-devel
 BuildRequires:	cups
 BuildRequires:	cups-devel
 BuildRequires:	ghostscript
-BuildRequires:	pkgconfig(Qt5Core)
+BuildRequires:	pkgconfig(Qt6Core)
 Requires:	cups
 
 %description
@@ -45,8 +45,8 @@ printers.
 
 %build
 %make_build V=1 OPTIM_CXXFLAGS="%{optflags}" LDFLAGS="%{build_ldflags}"
-%make_build CXXFLAGS="%{optflags} $(pkg-config Qt5Core --cflags)" \
-	LIBS="$(pkg-config Qt5Core --libs) %{ldflags}" -C tools
+%make_build CXXFLAGS="%{optflags} $(pkg-config Qt6Core --cflags)" \
+	LIBS="$(pkg-config Qt6Core --libs) %{ldflags}" -C tools
 
 %install
 %make_install

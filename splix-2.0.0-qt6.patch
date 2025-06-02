@@ -1,0 +1,345 @@
+--- splix-2.0.0/tools/Makefile.orig	2016-12-12 11:43:30.971504420 +0000
++++ splix-2.0.0/tools/Makefile	2016-12-12 11:41:36.187749959 +0000
+@@ -11,8 +11,8 @@
+ 
+ PROJECTS	:= decompress #jbgtopbm
+ 
+-CXXFLAGS  	:= -O0 -g `pkg-config QtCore --cflags`
+-LIBS		:= `pkg-config QtCore --libs`
++CXXFLAGS  	:= -O0 -g `pkg-config Qt6Core --cflags`
++LIBS		:= `pkg-config Qt6Core --libs`
+ 
+ OBJS_decompress	:= $(SRCS_decompress:.cpp=.o)
+ #OBJS_jbgtopbm	:= $(SRCS_jbgtopbm:.cpp=.o)
+diff -up splix-2.0.0/tools/algo0x11.cpp.omv~ splix-2.0.0/tools/algo0x11.cpp
+--- splix-2.0.0/tools/algo0x11.cpp.omv~	2025-06-02 16:17:23.943184881 +0200
++++ splix-2.0.0/tools/algo0x11.cpp	2025-06-02 16:17:28.283010450 +0200
+@@ -34,7 +34,7 @@ bool decompress0x11(const QByteArray& in
+ 
+     // Check the size
+     if (input.size() < 0x40*2 + 4) {
+-        err << _("Algo0x11: bad band size") << endl;
++        err << _("Algo0x11: bad band size") << Qt::endl;
+         return false;
+     }
+ 
+@@ -50,7 +50,7 @@ bool decompress0x11(const QByteArray& in
+ 
+     // Extract the first uncompressed data
+     if (input.size() <= idx + lastOccur) {
+-        err << _("Algo0x11: invalid band size") << endl;
++        err << _("Algo0x11: invalid band size") << Qt::endl;
+         return false;
+     }
+     for (w=0; w < lastOccur; w++)
+diff -up splix-2.0.0/tools/appliargs.cpp.omv~ splix-2.0.0/tools/appliargs.cpp
+--- splix-2.0.0/tools/appliargs.cpp.omv~	2025-06-02 16:15:45.804146840 +0200
++++ splix-2.0.0/tools/appliargs.cpp	2025-06-02 16:15:51.245786184 +0200
+@@ -180,24 +180,24 @@ void AppliArgs::printErrors(QTextStream&
+ 
+         switch (errNr) {
+             case Internal:
+-                out << _("Invalid argument number") << endl;
++                out << _("Invalid argument number") << Qt::endl;
+                 break;
+             case UnknownOption:
+                 out << QString(_("Unknown option %1")).
+-                    arg(err.section(':', 1)) << endl;
++                    arg(err.section(':', 1)) << Qt::endl;
+                 break;
+             case NotEnoughParameters:
+                 out << QString(_("Not enough parameter(s) for option %1")).
+-                    arg(err.section(':', 1)) << endl;
++                    arg(err.section(':', 1)) << Qt::endl;
+                 break;
+             case NotEnoughAloneParameters:
+-                out << QString(_("Not enough parameter(s)")) << endl;
++                out << QString(_("Not enough parameter(s)")) << Qt::endl;
+                 break;
+             case TooMuchParameters:
+-                out << QString(_("Too much parameter(s)")) << endl;
++                out << QString(_("Too much parameter(s)")) << Qt::endl;
+                 break;
+             default:
+-                out << _("Unknown error") << endl;
++                out << _("Unknown error") << Qt::endl;
+         };
+     }
+ }
+diff -up splix-2.0.0/tools/appliargs.h.omv~ splix-2.0.0/tools/appliargs.h
+--- splix-2.0.0/tools/appliargs.h.omv~	2025-06-02 15:56:53.691650679 +0200
++++ splix-2.0.0/tools/appliargs.h	2025-06-02 15:57:01.081568701 +0200
+@@ -54,7 +54,7 @@ class AppliArgs
+                                     at(nr); }
+     public:
+         void                    addSupportedArgs(const QString& longArg, 
+-                                    const QChar& shortArg=0, quint8 nrVal=0);
++                                    const QChar& shortArg=QChar(0), quint8 nrVal=0);
+         void                    addSupportedArgs(const QStringList& args);
+         bool                    parse(int argc, char** argv, quint32 maxParams);
+         void                    printErrors(QTextStream& out) const;
+diff -up splix-2.0.0/tools/decompress.cpp.omv~ splix-2.0.0/tools/decompress.cpp
+--- splix-2.0.0/tools/decompress.cpp.omv~	2025-06-02 15:57:09.933249441 +0200
++++ splix-2.0.0/tools/decompress.cpp	2025-06-02 16:15:25.172970734 +0200
+@@ -19,7 +19,6 @@
+  */
+ #include "appliargs.h"
+ #include <QtCore/QTextStream>
+-#include <QtCore/QTextCodec>
+ #include <QtCore/QByteArray>
+ #include <QtCore/QFile>
+ #include "qpdl.h"
+@@ -28,7 +27,6 @@
+ 
+ int main(int argc, char** argv)
+ {
+-    QTextCodec::setCodecForLocale(QTextCodec::codecForName("latin1"));
+     AppliArgs args(QStringList() << "spl2,2" << "splc,c" << "~help,h" << 
+         "~version,v" << "quiet,q" << "decompress,d" << "dump,D");
+     QTextStream out(stdout), err(stderr);
+@@ -42,23 +40,23 @@ int main(int argc, char** argv)
+         args.printErrors(err);
+ 
+         out << QString(_("Usage: %1 [options] <QPDL file>")).arg(args.
+-            applicationName()) << endl;
+-        out << _("Available options:") << endl;
+-        out << _("  --decompress, -d          Decompress bands") << endl;
+-        out << _("  --dump, -D                Dump bands in files") << endl;
+-        out << _("  --help, -h                Print this help message") << endl;
+-        out << _("  --quiet, -q               Be quiet") << endl;
++            applicationName()) << Qt::endl;
++        out << _("Available options:") << Qt::endl;
++        out << _("  --decompress, -d          Decompress bands") << Qt::endl;
++        out << _("  --dump, -D                Dump bands in files") << Qt::endl;
++        out << _("  --help, -h                Print this help message") << Qt::endl;
++        out << _("  --quiet, -q               Be quiet") << Qt::endl;
+         out << _("  --spl2, -2                This is a SPL2 document "
+-            "[default]") << endl;
+-        out << _("  --splc, -c                This is a SPLc document") << endl;
++            "[default]") << Qt::endl;
++        out << _("  --splc, -c                This is a SPLc document") << Qt::endl;
+         out << _("  --version, -v             Print the version information") <<
+-            endl;
++            Qt::endl;
+         return argsErr ? 1 : 0;
+     } else if (args.isOptionSet("version")) {
+-        out << _("(C) decompress, 2006-2007 by Aurélien Croc") << endl;
++        out << _("(C) decompress, 2006-2007 by Aurélien Croc") << Qt::endl;
+         out << _("This project is under the GNU General Public Licence "
+-            "version 2") << endl;
+-        out << _("More information => http://splix.ap2c.org") << endl << endl;
++            "version 2") << Qt::endl;
++        out << _("More information => http://splix.ap2c.org") << Qt::endl << Qt::endl;
+         return 0;
+     }
+     quiet = args.isOptionSet("quiet");
+@@ -68,15 +66,15 @@ int main(int argc, char** argv)
+     qpdlDocument.setFileName(args.parameter(0));
+     if (!qpdlDocument.open(QIODevice::ReadOnly)) {
+         err << QString(_("Error: cannot open file %1 (%2)")).
+-            arg(qpdlDocument.fileName()).arg(qpdlDocument.error()) << endl;
++            arg(qpdlDocument.fileName()).arg(qpdlDocument.error()) << Qt::endl;
+         return -qpdlDocument.error();
+     }
+     if (qpdlDocument.read(9) != QByteArray("%-12345X")) {
+-        err << QString(_("Error: this file is not a QPDL document")) << endl;
++        err << QString(_("Error: this file is not a QPDL document")) << Qt::endl;
+         return 1;
+     }
+     if (!parsePJLHeader(qpdlDocument, quiet, out, err)) {
+-        err << QString(_("Error: Invalid PJL header")) << endl;
++        err << QString(_("Error: Invalid PJL header")) << Qt::endl;
+         return 1;
+     }
+ 
+diff -up splix-2.0.0/tools/page.cpp.omv~ splix-2.0.0/tools/page.cpp
+--- splix-2.0.0/tools/page.cpp.omv~	2025-06-02 16:16:55.753428993 +0200
++++ splix-2.0.0/tools/page.cpp	2025-06-02 16:17:00.004644996 +0200
+@@ -68,7 +68,7 @@ bool Page::_openFiles(quint8 compression
+             10, QChar('0')).arg(_colorsName[i]).arg(extension));
+         if (!_files[i].open(QIODevice::WriteOnly)) {
+             err << QString(_("Page: cannot open file %1 in write mode")).
+-                arg(_files[i].fileName()) << endl;
++                arg(_files[i].fileName()) << Qt::endl;
+             _closeFiles();
+             return false;
+         }
+@@ -151,14 +151,14 @@ bool Page::process(quint8 color, quint16
+         extension = "jbg";
+     else {
+         err << QString(_("Page: Unsupported compression algorithm (0x%1)")).
+-            arg(compression, 0, 16) << endl;
++            arg(compression, 0, 16) << Qt::endl;
+         return false;
+     }
+ 
+     // Check the sub-header version
+     if (_version > 3) {
+         err << QString(_("Page: unsupported band sub-header version (%1)")).
+-            arg(_version) << endl;
++            arg(_version) << Qt::endl;
+         return false;
+     }
+ 
+@@ -177,14 +177,14 @@ bool Page::process(quint8 color, quint16
+ 
+                 if (tmp != 0)
+                     err << QString(_("Page: invalid header value in sub-header "
+-                        "band (%1)")).arg(tmp) << endl;
++                        "band (%1)")).arg(tmp) << Qt::endl;
+             }
+             content.remove(0, 6*4);
+         }
+         if (content.size() != size) {
+             err << QString(_("Page: content data is %1 bytes long whereas it "
+                 "should be %2 bytes long")).arg(content.size()).arg(size) << 
+-                endl;
++                Qt::endl;
+             return false;
+         }
+     }
+diff -up splix-2.0.0/tools/pjl.cpp.omv~ splix-2.0.0/tools/pjl.cpp
+--- splix-2.0.0/tools/pjl.cpp.omv~	2025-06-02 16:16:08.898100717 +0200
++++ splix-2.0.0/tools/pjl.cpp	2025-06-02 16:16:14.285795073 +0200
+@@ -29,12 +29,12 @@ bool parsePJLHeader(QFile& qpdlDocument,
+     QString line, command, arg;
+ 
+     if (!quiet)
+-        out << _("PJL header: ") << endl;
++        out << _("PJL header: ") << Qt::endl;
+ 
+     while (!qpdlDocument.atEnd()) {
+         line = qpdlDocument.readLine();
+         if (!line.startsWith("@PJL ")) {
+-            err << QString(_("Unknown PJL argument: %1")).arg(line) << endl;
++            err << QString(_("Unknown PJL argument: %1")).arg(line) << Qt::endl;
+             return false;
+         }
+         line.remove(0, 5);
+@@ -43,16 +43,16 @@ bool parsePJLHeader(QFile& qpdlDocument,
+         if (command == "ENTER LANGUAGE") {
+             if (arg != "QPDL") {
+                 err << QString(_("Unsupported printer language: %1")).
+-                    arg(arg) << endl;
++                    arg(arg) << Qt::endl;
+                 return false;
+             }
+             if (!quiet)
+-                out << endl;
++                out << Qt::endl;
+             return true;
+         }
+         if (!quiet)
+             out << "    " << command << QString().fill('.', 30 - 
+-                command.size()) << " = " << arg << endl;
++                command.size()) << " = " << arg << Qt::endl;
+     }
+     return false;
+ }
+diff -up splix-2.0.0/tools/qpdl.cpp.omv~ splix-2.0.0/tools/qpdl.cpp
+--- splix-2.0.0/tools/qpdl.cpp.omv~	2025-06-02 16:16:33.899856497 +0200
++++ splix-2.0.0/tools/qpdl.cpp	2025-06-02 16:16:38.443285543 +0200
+@@ -117,7 +117,7 @@ QPDLDocument::Result QPDLDocument::_read
+         return End;
+     if (header.at(HEADER_SIGNATURE) != 0) {
+         err << QString(_("QPDL: bad page header signature (%1)")).
+-            arg((quint8)header.at(HEADER_SIGNATURE)) << endl;
++            arg((quint8)header.at(HEADER_SIGNATURE)) << Qt::endl;
+         return Error;
+     }
+ 
+@@ -157,26 +157,26 @@ QPDLDocument::Result QPDLDocument::_read
+ 
+     // Print a summary
+     if (!_quiet) {
+-        out << QString(_("Page %1 header:")).arg(_pageNr) << endl;
++        out << QString(_("Page %1 header:")).arg(_pageNr) << Qt::endl;
+         out << "    " << QString(_("QPDL version..... = %1")).
+-            arg(_qpdl) << endl;
++            arg(_qpdl) << Qt::endl;
+         out << "    " << QString(_("Number of copies. = %1")).
+-            arg(_nrCopies) << endl;
++            arg(_nrCopies) << Qt::endl;
+         out << "    " << QString(_("Resolution....... = %1×%2")).
+-            arg(_resolutionX).arg(_resolutionY) << endl;
++            arg(_resolutionX).arg(_resolutionY) << Qt::endl;
+         out << "    " << QString(_("Paper type....... = %1")).
+             arg(_paperType <= MAX_PAPER_TYPE ? _paperTypeName[_paperType] :
+-            QString("*Unknown* (%1)").arg(_paperType)) << endl;
++            QString("*Unknown* (%1)").arg(_paperType)) << Qt::endl;
+         out << "    " << QString(_("Paper source..... = %1")).
+             arg(_paperSource<=MAX_PAPER_SOURCE ? _paperSourceName[_paperSource]:
+-            QString("*Unknown* (%1)").arg(_paperSource)) << endl;
++            QString("*Unknown* (%1)").arg(_paperSource)) << Qt::endl;
+         out << "    " << QString(_("Printable area... = %1×%2")).
+-            arg(_width).arg(_height) << endl;
++            arg(_width).arg(_height) << Qt::endl;
+         out << "    " << QString(_("Duplex - Tumble.. = %1 %2")).
+-            arg(_duplex, 1).arg(_tumble, 1) << endl;
++            arg(_duplex, 1).arg(_tumble, 1) << Qt::endl;
+         out << "    " << QString(_("Unknown bytes.... = %1 %2 %3")).
+             arg((quint8)_unknown[0], 1).arg((quint8)_unknown[1], 1).
+-            arg((quint8)_unknown[2], 1) << endl;
++            arg((quint8)_unknown[2], 1) << Qt::endl;
+     }
+ 
+     return Ok;
+@@ -209,11 +209,11 @@ QPDLDocument::Result QPDLDocument::_read
+         data.getChar(&signature);
+         if (signature == 0x1) { // End of the page
+             if (!_quiet)
+-                out << QString("(0x%1)").arg(compression, 0, 16) << endl;
++                out << QString("(0x%1)").arg(compression, 0, 16) << Qt::endl;
+             return Ok;
+         } else if (signature != 0xC) {
+             err << QString(_("QPDL: bad band header signature (%1)")).
+-                arg((quint8)signature) << endl;
++                arg((quint8)signature) << Qt::endl;
+             return Error;
+         }
+ 
+@@ -238,7 +238,7 @@ QPDLDocument::Result QPDLDocument::_read
+                     break;
+                 if (color < 0 || color > 4) {
+                     err << QString(_("QPDL: bad color value (%1) in band %2")).
+-                        arg((quint8)color).arg(_currentBandNr) << endl;
++                        arg((quint8)color).arg(_currentBandNr) << Qt::endl;
+                     return Error;
+                 }
+ 
+@@ -263,7 +263,7 @@ QPDLDocument::Result QPDLDocument::_read
+             data.getChar(&color);
+             if (color <= 0 || color > 4) {
+                 err << QString(_("QPDL: bad color value (%1) in band %2")).
+-                    arg((quint8)color).arg(_currentBandNr) << endl;
++                    arg((quint8)color).arg(_currentBandNr) << Qt::endl;
+                 return Error;
+             }
+ 
+@@ -321,7 +321,7 @@ bool QPDLDocument::_processBandAnalysis(
+             err << QString(_("QPDL: Invalid signature (0x%1%2%3%4)")).
+                 arg((quint8)content.at(0),0,16).arg((quint8)content.at(1),0,16).
+                 arg((quint8)content.at(2),0,16).arg((quint8)content.at(3),0,16) 
+-                << endl;
++                << Qt::endl;
+             return false;
+         } else {
+             be = false;
+@@ -345,7 +345,7 @@ bool QPDLDocument::_processBandAnalysis(
+         if (givenCheckSum != checkSum) {
+             err << QString(_("QPDL: band checksum invalid! (0x%1-0x%2)")).
+                 arg(givenCheckSum, 8, 16, QChar('0')).arg(checkSum, 8, 16,
+-                QChar('0')) << endl;
++                QChar('0')) << Qt::endl;
+             return false;
+         }
+         content.remove(content.size() - 4, 4);
+@@ -396,7 +396,7 @@ bool QPDLDocument::parse(QFile& data, QT
+         nrCopies = ((quint8)footer.at(0) << 8) + (quint8)footer.at(1);
+         if (!_quiet)
+             out << QString(_("Page %1 done (%2 copie(s)).")).arg(_pageNr).
+-                arg(nrCopies) << endl << endl;
++                arg(nrCopies) << Qt::endl << Qt::endl;
+         _page.flush();
+     }
+     return true;
