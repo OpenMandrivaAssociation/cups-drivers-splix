@@ -14,6 +14,7 @@ Patch2:		splix-2.0.0-gcc44.patch
 Patch3:		splix-2.0.0-gcc45.diff
 Patch4:		splix-2.0.0-qt6.patch
 Patch5:		splix-2.0.0-compile.patch
+BuildRequires:	make
 BuildRequires:	pkgconfig(com_err)
 BuildRequires:	pkgconfig(mit-krb5-gssapi)
 BuildRequires:	pkgconfig(mit-krb5)
